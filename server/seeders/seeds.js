@@ -1,4 +1,4 @@
-const { faker } = require("@faker-js/faker");
+const { faker } = require('@faker-js/faker');
 
 const db = require("../config/connection");
 const { User } = require("../models");
@@ -6,20 +6,18 @@ const { User } = require("../models");
 db.once("open", async () => {
 	//   await Thought.deleteMany({});
 	await User.deleteMany({});
+	
 
 	// create user data
 	const userData = [];
 
 	for (let i = 0; i < 15; i += 1) {
-		var fakeUser = {
-			first_name: faker.name.firstName(),
-			last_name: faker.name.lastName(),
-			email: faker.internet.email(),
-			password: faker.internet.password(
-				8),
-		};
+		let full_name = faker.name.findName();
+		let email = faker.internet.email();
+		let password = faker.internet.password(8);
+	
 
-		userData.push(fakeUser);
+		userData.push({full_name, email, password});
 	}
 
 	await User.collection.insertMany(userData);
