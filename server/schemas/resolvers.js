@@ -1,6 +1,6 @@
 const { AuthenticationError } = require("apollo-server-express");
 const { signToken } = require("../utils/auth");
-const { User } = require("../models");
+const { User, Project} = require("../models");
 
 const resolvers = {
 	Query: {
@@ -18,12 +18,16 @@ const resolvers = {
 		},
 		// get all users
 		users: async () => {
-			return User.find().select("-__v -password");
+			return User.find().select("-__v -password").populate('projects');
 		},
 		//  get a user by first name
 		user: async (parent, { full_name }) => {
 			return User.findOne({ full_name }).select("-__v -password");
 		},
+		// get all projects
+		projects: async () => {
+			return Project.find().populate('assigned_users')
+		}
 	},
 	Mutation: {
 		// create new account using jwt
